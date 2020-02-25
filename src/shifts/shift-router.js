@@ -17,7 +17,6 @@ shiftRouter
   })
   .post(jsonParser, (req, res, next) => {
     const {
-      id,
       cupping,
       vault_money,
       shift_money,
@@ -32,11 +31,9 @@ shiftRouter
       escapes,
       resume_genesis,
       atm,
-      visa,
-      date_created
+      visa
     } = req.body;
     const newShift = {
-      id,
       cupping,
       vault_money,
       shift_money,
@@ -51,8 +48,7 @@ shiftRouter
       escapes,
       resume_genesis,
       atm,
-      visa,
-      date_created
+      visa
     };
 
     for (const [key, value] of Object.entries(newShift))
@@ -101,7 +97,6 @@ shiftRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const {
-      id,
       cupping,
       vault_money,
       shift_money,
@@ -120,7 +115,6 @@ shiftRouter
       date_created
     } = req.body;
     const shiftToUpdate = {
-      id,
       cupping,
       vault_money,
       shift_money,
@@ -150,7 +144,10 @@ shiftRouter
     shiftService
       .updateShift(req.app.get('db'), req.params.shift_id, shiftToUpdate)
       .then(numRowsAffected => {
-        res.status(204).end();
+        res
+          .location(path.posix.join(req.originalUrl, `${req.params.shift_id}`))
+          .status(204)
+          .end();
       })
       .catch(next);
   });
